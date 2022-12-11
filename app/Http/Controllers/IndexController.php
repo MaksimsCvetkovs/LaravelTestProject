@@ -4,25 +4,62 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Supplier;
-use App\Models\SupplierUser;
-use App\Models\SupplierUserRole;
+use App\Models\Project;
 
 class IndexController extends Controller {
 
-    public function index() {
+    public function index(Request $request) {
         return view("index");
     }
 
+    public function projects(Request $request) {
+        $projectsQuery = Project::where("hidden", false)->where("deleted", false);
+
+        $paginator = $projectsQuery->paginate(10);
+
+        return view("project.list", ["paginator" => $paginator]);
+    }
+
+    public function projectView(Request $request, $projectId) {
+        $project = Project::findOrFail($projectId);
+
+        if ($project->deleted) {
+            abort(404);
+        }
+
+        $user = auth()->user();
+
+        if (!$user) {
+            if ($project->hidden) {
+                abort(404);
+            }
+        }
+
+        $isCreator = $project->created_by != $user->id;
+
+        if ($user) {
+            if ($isCreator) {
+                abort(404);
+            }
+        }
+
+        return view("project.view", ["project" => $project]);
+    }
+
+    public function projectViewPost(Request $request, $projectId) {
+        abort(404);
+    }
+
     public function suppliers(Request $request) {
-        $suppliers = Supplier::with([
+        /*$suppliers = Supplier::with([
             "userRoles",
             "userRoles.users",
         ])->get();
 
         return view("supplier.list", [
             "suppliers" => $suppliers,
-        ]);
+        ]);*/
+        abort(404);
     }
 
     public function supplierCreate(Request $request) {

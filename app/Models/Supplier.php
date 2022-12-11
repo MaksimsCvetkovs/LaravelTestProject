@@ -15,7 +15,11 @@ class Supplier extends Model {
         return $this->hasMany(SupplierUserRole::class);
     }
 
-    public function canEdit(User $user) {
+    public function canEdit(User|null $user) {
+        if (!$user) {
+            return false;
+        }
+
         return $this->userRoles->contains(
             fn ($userRole) => $userRole->users->contains(
                 fn ($supplierUser) => $supplierUser->user_id == $user->id
