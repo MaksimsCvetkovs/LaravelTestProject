@@ -9,7 +9,7 @@
 
         <div class="mb-5">
             <label for="name" class="form-label">@lang("validation.attributes.name")</label>
-            <input class="form-control @error("name") is-invalid @enderror" type="text" name="name" value="{{ old('name') }}">
+            <input class="form-control @error("name") is-invalid @enderror" type="text" name="name" value="{{ old('name') }}" min="4" max="50">
             @error("name")
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror

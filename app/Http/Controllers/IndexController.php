@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Manf;
 use App\Models\Project;
+use App\Models\Service;
 
 class IndexController extends Controller {
 
@@ -12,16 +14,78 @@ class IndexController extends Controller {
         return view("index");
     }
 
-    public function projects(Request $request) {
-        $projectsQuery = Project::where("hidden", false)->where("deleted", false);
+    public function services(Request $request) {
+        $servicesQuery = Service::query()
+            ->withCount("printers")
+            ->where("hidden", false)
+            ->where("deleted", false);
 
-        $paginator = $projectsQuery->paginate(10);
+        $paginator = $servicesQuery->paginate(4);
+
+        return view("service.list", ["paginator" => $paginator]);
+    }
+
+    public function serviceView(Request $request, $serviceId) {
+        $service = Service::query()
+            ->with([
+                "manf",
+                "printers",
+            ])
+            ->findOrFail($serviceId);
+
+        if ($service->deleted) {
+            abort(404);
+        }
+
+        $user = auth()->user();
+
+        if (!$user) {
+            if ($service->hidden) {
+                abort(404);
+            }
+        }
+
+        $canEdit = $user && $service->manf->canEdit($user);
+
+        if ($user) {
+            if (!$canEdit && $service->hidden) {
+                abort(404);
+            }
+        }
+
+        $paginator = $service->printers()->paginate(4);
+
+        return view("service.view", [
+            "service" => $service,
+            "paginator" => $paginator,
+        ]);
+    }
+
+    public function manfs(Request $request) {
+        $manfsQuery = Manf::query()
+            ->where("hidden", false)
+            ->where("deleted", false);
+
+        $paginator = $manfsQuery->paginate(4);
+
+        return view("manf.list", ["paginator" => $paginator]);
+    }
+
+    public function projects(Request $request) {
+        $projectsQuery = Project::query()
+            ->withCount("models")
+            ->whereHas("models")
+            ->where("hidden", false)
+            ->where("deleted", false);
+
+        $paginator = $projectsQuery->paginate(4);
 
         return view("project.list", ["paginator" => $paginator]);
     }
 
     public function projectView(Request $request, $projectId) {
-        $project = Project::findOrFail($projectId);
+        $project = Project::query()
+            ->findOrFail($projectId);
 
         if ($project->deleted) {
             abort(404);
@@ -35,19 +99,20 @@ class IndexController extends Controller {
             }
         }
 
-        $isCreator = $project->created_by != $user->id;
+        $isCreator = $user && $project->canEdit($user);
 
         if ($user) {
-            if ($isCreator) {
+            if (!$isCreator && $project->hidden) {
                 abort(404);
             }
         }
 
-        return view("project.view", ["project" => $project]);
-    }
+        $paginator = $project->models()->paginate(6);
 
-    public function projectViewPost(Request $request, $projectId) {
-        abort(404);
+        return view("project.view", [
+            "project" => $project,
+            "paginator" => $paginator,
+        ]);
     }
 
     public function suppliers(Request $request) {

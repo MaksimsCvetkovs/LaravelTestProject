@@ -1,5 +1,5 @@
 @php
-    $title = __("title.projects");
+    $title = __("title.my-projects");
     $user = auth()->user();
 @endphp
 
@@ -8,6 +8,8 @@
 @section("body")
     <div class="container">
         <h1>{{ $title }}</h1>
+
+        <a href="{{ route('user.project.create') }}" class="btn btn-primary">Create</a>
 
         <div class="list-unstyled">
         @foreach ($paginator->items() as $project)

@@ -14,4 +14,8 @@ class Project extends Model {
     public function models() {
         return $this->belongsToMany(Model3D::class, table: "project_models", relatedPivotKey: "model_id");
     }
+
+    public function canEdit(User $user) {
+        return !$this->deleted && $this->created_by == $user->id;
+    }
 }
