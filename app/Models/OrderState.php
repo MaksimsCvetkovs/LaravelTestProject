@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SupplierUser extends Model {
+class OrderState extends Model {
 
     use HasFactory;
 
     public $timestamps = false;
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
+    protected $table = "order_history";
 }

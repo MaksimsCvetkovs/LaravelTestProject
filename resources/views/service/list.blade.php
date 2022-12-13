@@ -17,6 +17,7 @@
                 </div>
                 <div class="flex-grow-1 ms-3">
                     <h4>{{ $service->name }}</h4>
+                    <p>Service by <a href="{{ route('manf.view', ['manfId' => $service->manf->id]) }}">{{ $service->manf->name }}</a></p>
                     <p>{{ $service->descr }}</p>
                 @if ($service->printers_count > 0)
                     <p>@lang("service.printers-count", ["count" => $service->printers_count])</p>

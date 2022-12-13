@@ -20,6 +20,9 @@ use Faker;
 
 class DatabaseSeeder extends Seeder {
 
+    private $modelNumber;
+    private $projectNumber;
+
     public function run() {
         $user = (new CreateNewUser)->create([
             "name" => "MAX",
@@ -32,8 +35,10 @@ class DatabaseSeeder extends Seeder {
         $faker->addProvider(new Faker\Provider\lv_LV\Person($faker));
 
         for ($i = 0; $i < 12; $i++) {
-            $project = $this->fakeProject($faker, $user, modelsCount: 4, hiddenProject: true, hiddenModels: true);
+            $this->fakeProject($faker, $user, modelsCount: 20, hiddenProject: true, hiddenModels: true);
         }
+
+        $this->fakeManf($faker, $user, servicesCount: 4);
 
         $userGroup = UserGroup::where("name", "user")->firstOrFail();
 
@@ -61,8 +66,10 @@ class DatabaseSeeder extends Seeder {
     }
 
     protected function fakeProject($faker, $user, $modelsCount, $hiddenProject = false, $hiddenModels = false) {
+        $this->projectNumber++;
+        
         $project = new Project;
-        $project->name = "PROJECT " . $faker->sentence();
+        $project->name = "PROJECT #$this->projectNumber";
         $project->descr = $faker->sentence();
         $project->created_at = Carbon::now();
         $project->created_by = $user->id;
@@ -82,8 +89,10 @@ class DatabaseSeeder extends Seeder {
     }
 
     protected function fakeModel($faker, $user, $hidden = false) {
+        $this->modelNumber++;
+
         $model = new Model3D;
-        $model->name = "MODEL " . $faker->sentence();
+        $model->name = "MODEL #$this->modelNumber";
         $model->descr = $faker->sentence();
         $model->created_at = Carbon::now();
         $model->created_by = $user->id;

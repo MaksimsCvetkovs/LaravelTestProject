@@ -25,27 +25,30 @@
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+    
+            <div class="mb-2">
+                <label for="hidden" class="form-label">@lang("validation.attributes.hidden")</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="hidden" @if (old("hidden", $project->hidden)) checked @endif>
+                </div>
+            @error("hidden")
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+            </div>
 
             <input class="btn btn-primary" type="submit" value="@lang('project.action.save')">
         </form>
 
         <div class="border">
+            <a class="btn btn-primary" href="{{ route('user.project.model.add.list', ['projectId' => $project->id]) }}">@lang("project.action.model-add")</a>
+
             <div class="list-unstyled">
-            {{--@foreach ($paginator->items() as $index => $model)
-                <div class="d-flex m-2 p-2">
-                    <div class="flex-shrink-0">
-                        <img class="mr-3" src="/images/test-2.png" alt="/images/test-2.png" style="width: 100px">
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                    @if ($paginator->total() > 1)
-                        <h2>{{ ($paginator->currentPage() - 1) * $paginator->perPage() + $index + 1 }} / {{ $paginator->total() }}</h2>
-                    @endif
-                        <h4>{{ $model->name }}</h4>
-                        <p>{{ $model->descr }}</p>
-                    </div>
-                </div>
-            @endforeach--}}
+            @foreach ($paginator->items() as $index => $model)
+            @include("model.item", ["catViewModel" => true, "canDeleteInProject" => true])
+            @endforeach
             </div>
+
+            @include("paginator")
         </div>
     </div>
 @endsection

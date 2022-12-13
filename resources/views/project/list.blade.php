@@ -9,6 +9,10 @@
     <div class="container">
         <h1>{{ $title }}</h1>
 
+    @if ($my)
+        <a href="{{ route('user.project.create') }}" class="btn btn-primary">@lang("project.action.create")</a>
+    @endif
+
         <div class="list-unstyled">
         @foreach ($paginator->items() as $project)
             <div class="border d-flex m-2 p-2">

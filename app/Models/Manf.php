@@ -20,6 +20,10 @@ class Manf extends Model {
     }
 
     public function canEdit(User $user) {
+        if ($this->deleted) {
+            return false;
+        }
+
         $manfRoleQuery = $this->roles()
             ->where("deleted", false)
             ->where("can_edit", true)

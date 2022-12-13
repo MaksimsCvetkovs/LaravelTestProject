@@ -1,1 +1,4 @@
 * validation.min.string
+* validation.min.numeric
+* validation.attributes.hidden
+* validation.attributes.width...

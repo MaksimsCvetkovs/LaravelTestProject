@@ -28,6 +28,9 @@
                         <a class="nav-link @if ($route == "project.list") active @endif" href="{{ route('project.list') }}">@lang("title.projects")</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if ($route == "model.list") active @endif" href="{{ route('model.list') }}">@lang("title.models")</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if ($route == "service.list") active @endif" href="{{ route('service.list') }}">@lang("title.services")</a>
                     </li>
                     <li class="nav-item">
@@ -38,7 +41,10 @@
                         <a class="nav-link @if ($route == "user.project.my") active @endif" href="{{ route('user.project.my') }}">@lang("title.my-projects")</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if ($route == "user.project.my") active @endif" href="{{ route('user.project.my') }}">@lang("title.my-manfs")</a>
+                        <a class="nav-link @if ($route == "user.model.my") active @endif" href="{{ route('user.model.my') }}">@lang("title.my-models")</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if ($route == "user.manf.my") active @endif" href="{{ route('user.manf.my') }}">@lang("title.my-manfs")</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}">@lang("title.logout")</a>

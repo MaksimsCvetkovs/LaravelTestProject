@@ -4,84 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Manf;
+use App\Models\ManfRole;
+use App\Models\Model3D;
 use App\Models\Project;
+use App\Models\Service;
 
 use Carbon\Carbon;
 
 class UserController extends Controller {
 
-    public function projects(Request $request) {
-        $user = auth()->user();
-        $projectsQuery = Project::query()
-            ->where("created_by", $user->id)
-            ->where("deleted", false);
+    public function serviceDelete(Request $request, $serviceId) {
+        $service = Service::findOrFail($serviceId);
+        $manf = $this->findEditManf($service->manf_id);
 
-        $paginator = $projectsQuery->paginate(4);
-
-        return view("user.project.list", ["paginator" => $paginator]);
-    }
-
-    public function projectCreate(Request $request) {
-        return view("user.project.create");
-    }
-
-    protected function validateProjectData(Request $request) {
-        $data = $request->validate([
-            "name" => "required|min:4|max:50",
-            "descr" => "max:65535",
+        return view("user.service.delete", [
+            "service" => $service,
         ]);
-
-        if (!$data["descr"]) {
-            $data["descr"] = "";
-        }
-
-        return $data;
     }
 
-    public function projectCreatePost(Request $request) {
-        $data = $this->validataProjectData($request);
+    public function serviceDeletePost(Request $request, $serviceId) {
+        $service = Service::findOrFail($serviceId);
+        $manf = $this->findEditManf($service->manf_id);
 
-        $project = new Project;
-        $project->name = $data["name"];
-        $project->descr = $data["descr"];
-        $project->created_at = Carbon::now();
-        $project->created_by = auth()->user()->id;
-        $project->deleted = false;
-        $project->hidden = true;
-        $project->save();
+        $service->deleted = true;
+        $service->save();
 
-        return redirect()->route("project.view", ["projectId" => $project->id]);
+        return redirect()->route("user.manf.edit", ["manfId" => $manf->id]);
     }
 
-    protected function findEditProject(Request $request, $projectId) {
-        $project = Project::findOrFail($projectId);
+    public function serviceEdit(Request $request, $serviceId) {
+        $service = Service::findOrFail($serviceId);
+        $manf = $this->findEditManf($service->manf_id);
 
-        if ($project->deleted) {
-            abort(404);
-        }
-
-        $user = auth()->user();
-
-        if (!$user || !$project->canEdit($user)) {
-            abort(404);
-        }
-
-        return $project;
-    }
-
-    public function projectEdit(Request $request, $projectId) {
-        $project = $this->findEditProject($request, $projectId);
-        return view("user.project.edit", ["project" => $project]);
-    }
-
-    public function projectEditPost(Request $request, $projectId) {
-        $project = $this->findEditProject($request, $projectId);
-        $data = $this->validateProjectData($request);
-
-        $project->name = $data["name"];
-        $project->descr = $data["descr"];
-        $project->save();
-
-        return redirect()->route("project.view", ["projectId" => $projectId]);
+        return view("user.service.edit", [
+            "service" => $service,
+        ]);
     }
 }

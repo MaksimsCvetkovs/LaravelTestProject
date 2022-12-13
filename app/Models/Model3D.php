@@ -12,4 +12,12 @@ class Model3D extends Model {
     public $timestamps = false;
 
     protected $table = "models";
+
+    public function projects() {
+        return $this->belongsToMany(Project::class, table: "project_models", foreignPivotKey: "model_id");
+    }
+
+    public function canEdit(User $user) {
+        return !$this->deleted && $this->created_by == $user->id;
+    }
 }
