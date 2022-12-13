@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Model3DController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ManfController;
+use App\Http\Controllers\ServiceController;
 
 Route::get("/", [IndexController::class, "index"])->name("index");
 
@@ -37,11 +38,29 @@ Route::middleware("auth")->group(function () {
     Route::post("/manfs/create", [ManfController::class, "manfCreatePost"]);
     Route::get("/manfs/{manfId}/edit", [ManfController::class, "manfEdit"])->name("user.manf.edit");
     Route::post("/manfs/{manfId}/edit", [ManfController::class, "manfEditPost"]);
+    Route::get("/manfs/{manfId}/edit/roles", [ManfController::class, "manfRoles"])->name("user.manf.role.list");
+    Route::get("/manfs/{manfId}/edit/roles/create", [ManfController::class, "manfRoleCreate"])->name("user.manf.role.create");
+    Route::post("/manfs/{manfId}/edit/roles/create", [ManfController::class, "manfRoleCreatePost"]);
+    Route::get("/manfs/{manfId}/edit/roles/{roleId}", [ManfController::class, "manfRoleView"])->name("user.manf.role.view");
+    Route::post("/manfs/{manfId}/edit/roles/{roleId}", [ManfController::class, "manfRoleViewPost"]);
+    Route::get("/manfs/{manfId}/edit/roles/{roleId}/edit", [ManfController::class, "manfRoleEdit"])->name("user.manf.role.edit");
+    Route::post("/manfs/{manfId}/edit/roles/{roleId}/edit", [ManfController::class, "manfRoleEditPost"]);
+    Route::get("/manfs/{manfId}/edit/roles/{roleId}/edit/users/add", [ManfController::class, "manfRoleUserAddList"])->name("user.manf.role.user.add.list");
+    Route::get("/manfs/{manfId}/edit/roles/{roleId}/edit/users/{userId}/add", [ManfController::class, "manfRoleUserAdd"])->name("user.manf.role.user.add");
+    Route::post("/manfs/{manfId}/edit/roles/{roleId}/edit/users/{userId}/add", [ManfController::class, "manfRoleUserAddPost"]);
+    Route::get("/manfs/{manfId}/edit/roles/{roleId}/edit/users/{userId}/delete", [ManfController::class, "manfRoleEditUserDelete"])->name("user.manf.role.user.delete");
+    Route::post("/manfs/{manfId}/edit/roles/{roleId}/edit/users/{userId}/delete", [ManfController::class, "manfRoleEditUserDeletePost"]);
+    Route::get("/manfs/{manfId}/edit/roles/{roleId}/delete", [ManfController::class, "manfRoleDelete"])->name("user.manf.role.delete");
+    Route::post("/manfs/{manfId}/edit/roles/{roleId}/delete", [ManfController::class, "manfRoleDeletePost"]);
 
-    Route::get("/services/{serviceId}/edit", [UserController::class, "serviceEdit"])->name("user.service.edit");
-    Route::post("/services/{serviceId}/edit", [UserController::class, "serviceEditPost"]);
-    Route::get("/services/{serviceId}/delete", [UserController::class, "serviceDelete"])->name("user.service.delete");
-    Route::post("/services/{serviceId}/delete", [UserController::class, "serviceDeletePost"]);
+    Route::get("/manfs/{manfId}/services/create", [ServiceController::class, "serviceCreate"])->name("user.service.create");
+    Route::post("/manfs/{manfId}/services/create", [ServiceController::class, "serviceCreatePost"]);
+    Route::get("/services/{serviceId}/edit", [ServiceController::class, "serviceEdit"])->name("user.service.edit");
+    Route::post("/services/{serviceId}/edit", [ServiceController::class, "serviceEditPost"]);
+    Route::get("/services/{serviceId}/delete", [ServiceController::class, "serviceDelete"])->name("user.service.delete");
+    Route::post("/services/{serviceId}/delete", [ServiceController::class, "serviceDeletePost"]);
+    Route::get("/services/{serviceId}/printers/{printerId}/delete", [ServiceController::class, "serviceEditPrinterDelete"])->name("user.service.edit.printer.delete");
+    Route::post("/services/{serviceId}/printers/{printerId}/delete", [ServiceController::class, "serviceEditPrinterDeletePost"]);
 });
 
 Route::get("/models", [Model3DController::class, "models"])->name("model.list");
@@ -54,6 +73,6 @@ Route::get("/manfs", [ManfController::class, "manfs"])->name("manf.list");
 Route::get("/manfs/{manfId}", [ManfController::class, "manfView"])->name("manf.view");
 Route::post("/manfs/{manfId}", [ManfController::class, "manfViewPost"]);
 
-Route::get("/services", [IndexController::class, "services"])->name("service.list");
-Route::get("/services/{serviceId}", [IndexController::class, "serviceView"])->name("service.view");
-Route::post("/services/{serviceId}", [IndexController::class, "serviceViewPost"]);
+Route::get("/services", [ServiceController::class, "services"])->name("service.list");
+Route::get("/services/{serviceId}", [ServiceController::class, "serviceView"])->name("service.view");
+Route::post("/services/{serviceId}", [ServiceController::class, "serviceViewPost"]);

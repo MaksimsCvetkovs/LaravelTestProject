@@ -37,7 +37,7 @@
         </form>
 
         <div class="border">
-            <a class="btn btn-primary" href="{{-- route('user.manf.service.create', ['manfId' => $manf->id]) --}}">@lang("service.action.create")</a>
+            <a class="btn btn-primary" href="{{ route('user.service.create', ['manfId' => $manf->id]) }}">@lang("service.action.create")</a>
 
             <div class="list-unstyled">
             @foreach ($paginator->items() as $index => $service)

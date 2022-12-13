@@ -19,7 +19,7 @@
         <div class="border">
             <div class="list-unstyled">
             @foreach ($paginator->items() as $index => $model)
-            @include("model.item", ["catViewModel" => true])
+            @include("model.item", ["canViewModel" => true])
             @endforeach
             </div>
 

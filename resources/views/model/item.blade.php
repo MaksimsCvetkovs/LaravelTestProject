@@ -27,7 +27,7 @@
         <h4>{{ $model->name }}</h4>
         <p>{{ $model->descr }}</p>
     @endif
-    @isset ($catViewModel)
+    @isset ($canViewModel)
     <a class="btn btn-primary" href="{{ route('model.view', ['modelId' => $model->id]) }}">@lang("model.action.view")</a>
     @endif
     @isset ($canDeleteInProject)

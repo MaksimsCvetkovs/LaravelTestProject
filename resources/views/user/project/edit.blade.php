@@ -44,7 +44,7 @@
 
             <div class="list-unstyled">
             @foreach ($paginator->items() as $index => $model)
-            @include("model.item", ["catViewModel" => true, "canDeleteInProject" => true])
+            @include("model.item", ["canViewModel" => true, "canDeleteInProject" => true])
             @endforeach
             </div>
 

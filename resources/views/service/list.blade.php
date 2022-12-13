@@ -17,17 +17,13 @@
                 </div>
                 <div class="flex-grow-1 ms-3">
                     <h4>{{ $service->name }}</h4>
-                    <p>Service by <a href="{{ route('manf.view', ['manfId' => $service->manf->id]) }}">{{ $service->manf->name }}</a></p>
+                    <p>@lang("service.manf-owned") <a href="{{ route('manf.view', ['manfId' => $service->manf_id]) }}">{{ $service->manf->name }}</a></p>
                     <p>{{ $service->descr }}</p>
                 @if ($service->printers_count > 0)
                     <p>@lang("service.printers-count", ["count" => $service->printers_count])</p>
                 @endif
 
-                @if ($user && $service->created_by == $user->id)
-                    <a href="{{ route("service.view", ["serviceId" => $service->id]) }}" class="btn btn-success">@lang("service.action.edit")</a>
-                @else
                     <a href="{{ route("service.view", ["serviceId" => $service->id]) }}" class="btn btn-primary">@lang("service.action.view")</a>
-                @endif
                 </div>
             </div>
         @endforeach

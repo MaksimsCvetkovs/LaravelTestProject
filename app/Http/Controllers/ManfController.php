@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
 use App\Models\Manf;
+use App\Models\ManfRole;
 
 class ManfController extends Controller {
 
@@ -34,6 +36,16 @@ class ManfController extends Controller {
         if (!$data["descr"]) {
             $data["descr"] = "";
         }
+
+        return $data;
+    }
+
+    public static function validateRoleData(Request $request) {
+        $data = $request->validate([
+            "name" => "required|min:2|max:100",
+        ]);
+
+        $data["can_edit"] = $request->boolean("can_edit");
 
         return $data;
     }
@@ -106,6 +118,134 @@ class ManfController extends Controller {
         $manfRole->users()->attach($user->id);
 
         return redirect()->route("manf.view", ["manfId" => $manf->id]);
+    }
+
+    public function manfRoles(Request $request, $manfId) {
+        $manf = $this->findEditManf($manfId);
+
+        $paginator = $manf->roles()->paginate(6);
+
+        return view("user.manf.role.list", [
+            "manf" => $manf,
+            "paginator" => $paginator,
+        ]);
+    }
+
+    public function manfRoleCreate(Request $request, $manfId) {
+        $manf = $this->findEditManf($manfId);
+        return view("user.manf.role.create");
+    }
+
+    public function manfRoleCreatePost(Request $request, $manfId) {
+        $manf = $this->findEditManf($manfId);
+
+        $data = $this->validateRoleData($request);
+
+        $role = new ManfRole;
+        $role->manf_id = $manfId;
+        $role->name = $data["name"];
+        $role->can_edit = $data["can_edit"];
+        $role->deleted = false;
+        $role->save();
+
+        return redirect()->route("user.manf.role.list", [
+            "manfId" => $manfId,
+        ]);
+    }
+
+    public static function findManfAndRole($manfId, $roleId) {
+        $role = ManfRole::findOrFail($roleId);
+        $manf = self::findEditManf($manfId);
+
+        if ($role->manf_id != $manf->id) {
+            abort(404);
+        }
+
+        return [$manf, $role];
+    }
+
+    public function manfRoleView(Request $request, $manfId, $roleId) {
+        [$manf, $role] = $this->findManfAndRole($manfId, $roleId);
+
+        $paginator = $role->users()->paginate(6);
+
+        return view("user.manf.role.view", [
+            "manf" => $manf,
+            "role" => $role,
+            "paginator" => $paginator,
+        ]);
+    }
+
+    public function manfRoleEdit(Request $request, $manfId, $roleId) {
+        [$manf, $role] = $this->findManfAndRole($manfId, $roleId);
+
+        return view("user.manf.role.edit", [
+            "manf" => $manf,
+            "role" => $role,
+        ]);
+    }
+
+    public function manfRoleEditPost(Request $request, $manfId, $roleId) {
+        [$manf, $role] = $this->findManfAndRole($manfId, $roleId);
+
+        $data = $this->validateRoleData($request);
+
+        $role->name = $data["name"];
+        $role->can_edit = $data["can_edit"];
+        $role->save();
+
+        return redirect()->route("user.manf.role.list", [
+            "manfId" => $manfId,
+        ]);
+    }
+
+    public function manfRoleUserAddList(Request $request, $manfId, $roleId) {
+        [$manf, $role] = $this->findManfAndRole($manfId, $roleId);
+
+        $usersQuery = User::whereDoesntHave("roles", function ($query) use ($roleId) {
+            $query->where("id", $roleId);
+        });
+
+        $paginator = $usersQuery->paginate(6);
+
+        return view("user.list", [
+            "manf" => $manf,
+            "role" => $role,
+            "paginator" => $paginator,
+        ]);
+    }
+
+    public function manfRoleUserAdd(Request $request, $manfId, $roleId, $userId) {
+        [$manf, $role] = $this->findManfAndRole($manfId, $roleId);
+
+        $role->users()->attach($userId);
+
+        return redirect()->route("user.manf.role.view", [
+            "manfId" => $manfId,
+            "roleId" => $roleId,
+        ]);
+    }
+
+    public function manfRoleEditUserDelete(Request $request, $manfId, $roleId, $userId) {
+        [$manf, $role] = $this->findManfAndRole($manfId, $roleId);
+
+        return view("delete", [
+            "title" => $role->name,
+            "message" => __("manf.role.user.delete"),
+            "deleteAction" => __("manf.role.user.action.delete"),
+            "cancelAction" => __("manf.role.user.action.cancel"),
+        ]);
+    }
+
+    public function manfRoleEditUserDeletePost(Request $request, $manfId, $roleId, $userId) {
+        [$manf, $role] = $this->findManfAndRole($manfId, $roleId);
+
+        $role->users()->detach($userId);
+
+        return redirect()->route("user.manf.role.view", [
+            "manfId" => $manfId,
+            "roleId" => $roleId,
+        ]);
     }
 
     public function manfs(Request $request) {

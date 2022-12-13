@@ -13,6 +13,7 @@
 
     @if ($user && $manf->canEdit($user))
         <a href="{{ route("user.manf.edit", ["manfId" => $manf->id]) }}" class="btn btn-success">@lang("manf.action.edit")</a>
+        <a href="{{ route("user.manf.role.list", ["manfId" => $manf->id]) }}" class="btn btn-success">@lang("manf.roles.view")</a>
     @endif
 
         <div class="border">
