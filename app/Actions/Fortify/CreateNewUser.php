@@ -2,12 +2,16 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\User;
-use App\Models\UserGroup;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+
+use App\Mail\EmailVerificationMail;
+use App\Models\User;
+use App\Models\UserGroup;
+use App\Models\PersonalAccessToken;
 
 class CreateNewUser implements CreatesNewUsers {
 
@@ -34,6 +38,21 @@ class CreateNewUser implements CreatesNewUsers {
         $user->password = Hash::make($input["password"]);
         $user->user_group_id = $userGroup->id;
         $user->save();
+
+        $token = bin2hex(random_bytes(20));
+
+        $accessToken = new PersonalAccessToken;
+        $accessToken->tokenable_type = $token;
+        $accessToken->tokenable_id = random_int(0, 10000000);
+        $accessToken->name = "verification";
+        $accessToken->token = $token;
+        $accessToken->abilities = json_encode([
+            "userId" => $user->id,
+            "email" => $user->email,
+        ], true);
+        $accessToken->save();
+
+        Mail::to($user->email)->send(new EmailVerificationMail($token));
 
         return $user;
     }

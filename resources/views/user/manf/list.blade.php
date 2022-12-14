@@ -9,7 +9,11 @@
     <div class="container">
         <h1>{{ $title }}</h1>
 
-        <a href="{{ route('user.manf.create') }}" class="btn btn-primary">Create</a>
+    @if ($user->isVerified())
+        <a href="{{ route('user.manf.create') }}" class="btn btn-primary">@lang("manf.action.create")</a>
+    @else
+        <a href="" class="btn btn-primary disabled">@lang("manf.action.create.need-verified")</a>
+    @endif
 
         <div class="list-unstyled">
         @foreach ($paginator->items() as $manf)

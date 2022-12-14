@@ -10,6 +10,7 @@ use App\Http\Controllers\ManfController;
 use App\Http\Controllers\ServiceController;
 
 Route::get("/", [IndexController::class, "index"])->name("index");
+Route::get("/token/{token}", [IndexController::class, "token"])->name("token");
 
 Route::middleware("auth")->group(function () {
     Route::get("/models/my", [Model3DController::class, "modelsMy"])->name("user.model.my");

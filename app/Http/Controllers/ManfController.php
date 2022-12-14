@@ -92,10 +92,22 @@ class ManfController extends Controller {
     }
 
     public function manfCreate(Request $request) {
+        $user = auth()->user();
+
+        if (!$user->isVerified()) {
+            abort(404);
+        }
+
         return view("user.manf.create");
     }
 
     public function manfCreatePost(Request $request) {
+        $user = auth()->user();
+
+        if (!$user->isVerified()) {
+            abort(404);
+        }
+
         $data = $this->validateManfData($request);
 
         $manf = new Manf;

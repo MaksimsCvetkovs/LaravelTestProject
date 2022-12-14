@@ -29,4 +29,8 @@ class User extends Authenticatable {
     public function roles() {
         return $this->belongsToMany(ManfRole::class, table: "manf_users");
     }
+
+    public function isVerified() {
+        return $this->email_verified_at != null;
+    }
 }

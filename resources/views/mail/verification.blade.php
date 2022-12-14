@@ -1,0 +1,1 @@
+<a class="btn btn-primary" href="{{ route("token", ["token" => $token]) }}">Click to verify email</a>
