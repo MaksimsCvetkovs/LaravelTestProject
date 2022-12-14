@@ -102,15 +102,28 @@ class ServiceController extends Controller {
     }
 
     public function services(Request $request) {
+        $nameSearch = $request->input("name_search");
+
         $servicesQuery = Service::query()
             ->with("manf")
             ->withCount("printers")
             ->where("hidden", false)
             ->where("deleted", false);
 
+        if ($nameSearch) {
+            $servicesQuery->where("name", "like", "%$nameSearch%");
+        }
+
         $paginator = $servicesQuery->paginate(4);
 
-        return view("service.list", ["paginator" => $paginator]);
+        return view("service.list", [
+            "paginator" => $paginator,
+            "nameSearch" => $nameSearch,
+        ]);
+    }
+
+    public function servicesPost(Request $request) {
+        return redirect()->route("service.list", ["name_search" => $request->input("name_search")]);
     }
 
     public function serviceView(Request $request, $serviceId) {

@@ -65,15 +65,19 @@ Route::middleware("auth")->group(function () {
 });
 
 Route::get("/models", [Model3DController::class, "models"])->name("model.list");
+Route::post("/models", [Model3DController::class, "modelsPost"]);
 Route::get("/models/{modelId}", [Model3DController::class, "modelView"])->name("model.view");
 
 Route::get("/projects", [ProjectController::class, "projects"])->name("project.list");
+Route::post("/projects", [ProjectController::class, "projectsPost"]);
 Route::get("/projects/{projectId}", [ProjectController::class, "projectView"])->name("project.view");
 
 Route::get("/manfs", [ManfController::class, "manfs"])->name("manf.list");
+Route::post("/manfs", [ManfController::class, "manfsPost"]);
 Route::get("/manfs/{manfId}", [ManfController::class, "manfView"])->name("manf.view");
 Route::post("/manfs/{manfId}", [ManfController::class, "manfViewPost"]);
 
 Route::get("/services", [ServiceController::class, "services"])->name("service.list");
+Route::post("/services", [ServiceController::class, "servicesPost"]);
 Route::get("/services/{serviceId}", [ServiceController::class, "serviceView"])->name("service.view");
 Route::post("/services/{serviceId}", [ServiceController::class, "serviceViewPost"]);

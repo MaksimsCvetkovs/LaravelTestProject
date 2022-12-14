@@ -131,13 +131,27 @@ class Model3DController extends Controller {
     }
 
     public function models(Request $request) {
+        $nameSearch = $request->input("name_search");
+
         $modelsQuery = Model3D::query()
             ->where("hidden", false)
             ->where("deleted", false);
 
+        if ($nameSearch) {
+            $modelsQuery->where("name", "like", "%$nameSearch%");
+        }
+
         $paginator = $modelsQuery->paginate(4);
 
-        return view("model.list", ["paginator" => $paginator, "my" => false]);
+        return view("model.list", [
+            "paginator" => $paginator,
+            "my" => false,
+            "nameSearch" => $nameSearch,
+        ]);
+    }
+
+    public function modelsPost(Request $request) {
+        return redirect()->route("model.list", ["name_search" => $request->input("name_search")]);
     }
 
     public function modelView(Request $request, $modelId) {

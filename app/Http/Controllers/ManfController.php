@@ -261,13 +261,26 @@ class ManfController extends Controller {
     }
 
     public function manfs(Request $request) {
+        $nameSearch = $request->input("name_search");
+
         $manfsQuery = Manf::query()
             ->where("hidden", false)
             ->where("deleted", false);
 
+        if ($nameSearch) {
+            $manfsQuery->where("name", "like", "%$nameSearch%");
+        }
+
         $paginator = $manfsQuery->paginate(4);
 
-        return view("manf.list", ["paginator" => $paginator]);
+        return view("manf.list", [
+            "paginator" => $paginator,
+            "nameSearch" => $nameSearch,
+        ]);
+    }
+
+    public function manfsPost(Request $request) {
+        return redirect()->route("manf.list", ["name_search" => $request->input("name_search")]);
     }
 
     public function manfView(Request $request, $manfId) {

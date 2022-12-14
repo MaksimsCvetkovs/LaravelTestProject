@@ -7,7 +7,19 @@
 
 @section("body")
     <div class="container">
-        <h1>{{ $title }}</h1>
+        <h1 class="mb-4">{{ $title }}</h1>
+
+        <div class="mb-4">
+            <form action="{{ url()->current() }}" method="POST">
+                @csrf
+                <div class="input-group">
+                    <input class="form-control" type="text" name="name_search" placeholder="@lang('validation.attributes.name')" value="{{ $nameSearch }}">
+                    <div class="input-group-append">
+                        <input class="btn btn-primary" type="submit" value="@lang('service.action.search')">
+                    </div>
+                </div>
+            </form>
+        </div>
 
     @if ($my)
         <a href="{{ route('user.project.create') }}" class="btn btn-primary">@lang("project.action.create")</a>

@@ -27,7 +27,7 @@
             @enderror
         </div>
 
-        <input class="btn btn-lg btn-primary w-100" type="submit" value="{{ $title }}" custom-class="is-primary">
+        <input class="btn btn-lg btn-primary w-100" type="submit" value="@lang('auth.action.login')" custom-class="is-primary">
     </form>
 </div>
 @endsection

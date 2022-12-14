@@ -1,5 +1,5 @@
 @php
-    $title = __("project.action.add-model");
+    $title = __("project.action.model-add");
     $user = auth()->user();
 @endphp
 

@@ -18,7 +18,7 @@
         <div class="container">
             <a class="navbar-brand @if ($route == "index") active @endif" href="{{ route('index') }}">@lang("title.home")</a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -38,23 +38,23 @@
                     </li>
                 @if ($user)
                     <li class="nav-item">
-                        <a class="nav-link @if ($route == "user.project.my") active @endif" href="{{ route('user.project.my') }}">@lang("title.my-projects")</a>
+                        <a class="nav-link @if ($route == "user.project.my") active @endif" href="{{ route('user.project.my') }}"><strong>@lang("title.my-projects")</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if ($route == "user.model.my") active @endif" href="{{ route('user.model.my') }}">@lang("title.my-models")</a>
+                        <a class="nav-link @if ($route == "user.model.my") active @endif" href="{{ route('user.model.my') }}"><strong>@lang("title.my-models")</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if ($route == "user.manf.my") active @endif" href="{{ route('user.manf.my') }}">@lang("title.my-manfs")</a>
+                        <a class="nav-link @if ($route == "user.manf.my") active @endif" href="{{ route('user.manf.my') }}"><strong>@lang("title.my-manfs")</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('logout') }}">@lang("title.logout")</a>
+                        <a class="nav-link" href="{{ route('logout') }}"><strong>@lang("title.logout")</strong></a>
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link @if ($route == "login") active @endif" href="{{ route('login') }}">@lang("title.login")</a>
+                        <a class="nav-link @if ($route == "login") active @endif" href="{{ route('login') }}"><strong>@lang("title.login")</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if ($route == "register") active @endif" href="{{ route('register') }}">@lang("title.register")</a>
+                        <a class="nav-link @if ($route == "register") active @endif" href="{{ route('register') }}"><strong>@lang("title.register")</strong></a>
                     </li>
                 @endif
                 </ul>

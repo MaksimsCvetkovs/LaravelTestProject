@@ -21,7 +21,7 @@ class EmailVerificationMail extends Mailable {
 
     public function envelope() {
         return new Envelope(
-            subject: "Email Verification Mail",
+            subject: __("mail.subject"),
         );
     }
 

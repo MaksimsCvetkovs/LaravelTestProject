@@ -47,7 +47,7 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
 
-        <input class="btn btn-lg btn-primary w-100" type="submit" value="{{ $title }}">
+        <input class="btn btn-lg btn-primary w-100" type="submit" value="@lang('auth.action.register')">
     </form>
 </div>
 @endsection

@@ -183,18 +183,29 @@ class ProjectController extends Controller {
     }
 
     public function projects(Request $request) {
+        $nameSearch = $request->input("name_search");
+
         $projectsQuery = Project::query()
             ->withCount("models")
             ->whereHas("models")
             ->where("hidden", false)
             ->where("deleted", false);
 
+        if ($nameSearch) {
+            $projectsQuery->where("name", "like", "%$nameSearch%");
+        }
+
         $paginator = $projectsQuery->paginate(4);
 
         return view("project.list", [
             "paginator" => $paginator,
             "my" => false,
+            "nameSearch" => $nameSearch,
         ]);
+    }
+
+    public function projectsPost(Request $request) {
+        return redirect()->route("project.list", ["name_search" => $request->input("name_search")]);
     }
 
     public function projectView(Request $request, $projectId) {
