@@ -114,7 +114,7 @@ class ServiceController extends Controller {
             $servicesQuery->where("name", "like", "%$nameSearch%");
         }
 
-        $paginator = $servicesQuery->paginate(4);
+        $paginator = $servicesQuery->paginate(4)->withQueryString();
 
         return view("service.list", [
             "paginator" => $paginator,
@@ -152,7 +152,7 @@ class ServiceController extends Controller {
             }
         }
 
-        $paginator = $service->printers()->paginate(4);
+        $paginator = $service->printers()->paginate(4)->withQueryString();
 
         return view("service.view", [
             "service" => $service,

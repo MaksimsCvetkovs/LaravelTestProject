@@ -57,15 +57,29 @@ class Model3DController extends Controller {
     }
 
     public function modelsMy(Request $request) {
+        $nameSearch = $request->input("name_search");
+
         $user = auth()->user();
 
         $modelsQuery = Model3D::query()
             ->where("created_by", $user->id)
             ->where("deleted", false);
 
-        $paginator = $modelsQuery->paginate(4);
+        if ($nameSearch) {
+            $modelsQuery->where("name", "like", "%$nameSearch%");
+        }
 
-        return view("model.list", ["paginator" => $paginator, "my" => true]);
+        $paginator = $modelsQuery->paginate(4)->withQueryString()->withQueryString();
+
+        return view("model.list", [
+            "paginator" => $paginator,
+            "my" => true,
+            "nameSearch" => $nameSearch,
+        ]);
+    }
+
+    public function modelsMyPost(Request $request) {
+         return redirect()->route("user.project.my", ["name_search" => $request->input("name_search")]);
     }
 
     public function modelCreate(Request $request) {
@@ -141,7 +155,7 @@ class Model3DController extends Controller {
             $modelsQuery->where("name", "like", "%$nameSearch%");
         }
 
-        $paginator = $modelsQuery->paginate(4);
+        $paginator = $modelsQuery->paginate(4)->withQueryString();
 
         return view("model.list", [
             "paginator" => $paginator,

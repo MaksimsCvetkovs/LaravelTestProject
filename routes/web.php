@@ -14,6 +14,7 @@ Route::get("/token/{token}", [IndexController::class, "token"])->name("token");
 
 Route::middleware("auth")->group(function () {
     Route::get("/models/my", [Model3DController::class, "modelsMy"])->name("user.model.my");
+    Route::post("/models/my", [Model3DController::class, "modelsMyPost"]);
     Route::get("/models/create", [Model3DController::class, "modelCreate"])->name("user.model.create");
     Route::post("/models/create", [Model3DController::class, "modelCreatePost"]);
     Route::get("/models/{modelId}/edit", [Model3DController::class, "modelEdit"])->name("user.model.edit");
@@ -22,6 +23,7 @@ Route::middleware("auth")->group(function () {
     Route::post("/models/{modelId}/delete", [Model3DController::class, "modelDeletePost"]);
 
     Route::get("/projects/my", [ProjectController::class, "projectsMy"])->name("user.project.my");
+    Route::post("/projects/my", [ProjectController::class, "projectsMyPost"]);
     Route::get("/projects/create", [ProjectController::class, "projectCreate"])->name("user.project.create");
     Route::post("/projects/create", [ProjectController::class, "projectCreatePost"]);
     Route::get("/projects/{projectId}/edit", [ProjectController::class, "projectEdit"])->name("user.project.edit");
@@ -81,3 +83,5 @@ Route::get("/services", [ServiceController::class, "services"])->name("service.l
 Route::post("/services", [ServiceController::class, "servicesPost"]);
 Route::get("/services/{serviceId}", [ServiceController::class, "serviceView"])->name("service.view");
 Route::post("/services/{serviceId}", [ServiceController::class, "serviceViewPost"]);
+
+Route::get("/users/{userId}", [UserController::class, "userView"])->name("user.view");

@@ -61,7 +61,7 @@ class ManfController extends Controller {
             })
             ->where("deleted", false);
 
-        $paginator = $manfsQuery->paginate(4);
+        $paginator = $manfsQuery->paginate(4)->withQueryString();
 
         return view("user.manf.list", ["paginator" => $paginator]);
     }
@@ -71,7 +71,7 @@ class ManfController extends Controller {
 
         $paginator = $manf->services()
             ->where("deleted", false)
-            ->paginate(4);
+            ->paginate(4)->withQueryString();
 
         return view("user.manf.edit", [
             "manf" => $manf,
@@ -271,7 +271,7 @@ class ManfController extends Controller {
             $manfsQuery->where("name", "like", "%$nameSearch%");
         }
 
-        $paginator = $manfsQuery->paginate(4);
+        $paginator = $manfsQuery->paginate(4)->withQueryString();
 
         return view("manf.list", [
             "paginator" => $paginator,
@@ -302,7 +302,7 @@ class ManfController extends Controller {
         $paginator = $manf->services()
             ->where("deleted", false)
             ->where("hidden", false)
-            ->paginate(4);
+            ->paginate(4)->withQueryString();
 
         return view("manf.view", [
             "manf" => $manf,

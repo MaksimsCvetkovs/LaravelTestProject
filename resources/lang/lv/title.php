@@ -12,5 +12,5 @@ return [
     "login" => "Pieslēgties",
     "logout" => "Izlogoties",
     "register" => "Reģistrēties",
-    "user" => "Mans profils",
+    "my-user" => "Mans profils",
 ];

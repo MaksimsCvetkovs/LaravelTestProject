@@ -47,6 +47,9 @@
                         <a class="nav-link @if ($route == "user.manf.my") active @endif" href="{{ route('user.manf.my') }}"><strong>@lang("title.my-manfs")</strong></a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if ($route == "user.view") active @endif" href="{{ route('user.view', ['userId' => $user->id]) }}"><strong>@lang("title.my-user")</strong></a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}"><strong>@lang("title.logout")</strong></a>
                     </li>
                 @else
